@@ -34,7 +34,7 @@ export function Sidebar() {
   return (
     <aside className="flex h-screen w-60 flex-col border-r bg-card">
       <div className="p-6">
-        <h1 className="text-lg font-bold text-primary">Job Tracker</h1>
+        <h1 className="text-lg font-bold text-primary">JobMind</h1>
         <p className="text-xs text-muted-foreground">AI-powered job search</p>
       </div>
 

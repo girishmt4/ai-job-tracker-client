@@ -62,7 +62,7 @@ export function Login() {
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle>Sign in</CardTitle>
-          <CardDescription>Welcome back to Job Tracker</CardDescription>
+          <CardDescription>Welcome back to JobMind</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
