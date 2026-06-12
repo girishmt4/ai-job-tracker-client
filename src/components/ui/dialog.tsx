@@ -13,7 +13,7 @@ function Dialog({ open, onOpenChange, children }: DialogProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
+        className="fixed inset-0 bg-foreground/40 animate-fade-in"
         onClick={() => onOpenChange(false)}
       />
       <div className="relative z-50 w-full max-w-lg animate-scale-in">{children}</div>
@@ -25,7 +25,7 @@ function DialogContent({ className, children, ...props }: React.HTMLAttributes<H
   return (
     <div
       className={cn(
-        'bg-card rounded-xl border shadow-glow p-6 max-h-[90vh] overflow-y-auto',
+        'bg-card rounded-lg border shadow-raised p-6 max-h-[90vh] overflow-y-auto',
         className
       )}
       {...props}

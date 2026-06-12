@@ -4,63 +4,59 @@
 
 @layer base {
   :root {
-    --background: 240 30% 99%;
-    --foreground: 224 71% 4%;
-    --card: 0 0% 100%;
-    --card-foreground: 224 71% 4%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 224 71% 4%;
-    --primary: 256 84% 58%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 250 40% 96%;
-    --secondary-foreground: 256 50% 30%;
-    --muted: 240 20% 96%;
-    --muted-foreground: 240 8% 46%;
-    --accent: 250 60% 95%;
-    --accent-foreground: 256 60% 35%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --success: 152 60% 40%;
-    --warning: 38 92% 50%;
-    --info: 217 91% 60%;
-    --border: 240 20% 90%;
-    --input: 240 20% 90%;
-    --ring: 256 84% 58%;
-    --radius: 0.75rem;
-
-    /* Brand gradient stops used across the app */
-    --brand-from: 256 84% 60%;
-    --brand-via: 280 80% 60%;
-    --brand-to: 220 90% 60%;
+    /* Warm paper + pine ink — an editorial, ledger-like palette */
+    --background: 40 33% 96%;
+    --foreground: 165 16% 12%;
+    --card: 42 40% 99%;
+    --card-foreground: 165 16% 12%;
+    --popover: 42 40% 99%;
+    --popover-foreground: 165 16% 12%;
+    --primary: 162 44% 22%;
+    --primary-foreground: 44 44% 97%;
+    --secondary: 38 28% 90%;
+    --secondary-foreground: 165 16% 16%;
+    --muted: 38 24% 91%;
+    --muted-foreground: 150 7% 38%;
+    --accent: 36 36% 87%;
+    --accent-foreground: 165 18% 16%;
+    --destructive: 6 56% 44%;
+    --destructive-foreground: 44 44% 97%;
+    --highlight: 22 64% 47%;
+    --highlight-foreground: 44 44% 97%;
+    --success: 152 42% 30%;
+    --warning: 32 68% 44%;
+    --info: 205 42% 40%;
+    --border: 38 18% 83%;
+    --input: 38 18% 80%;
+    --ring: 162 44% 28%;
+    --radius: 0.375rem;
   }
 
   .dark {
-    --background: 240 16% 7%;
-    --foreground: 240 20% 96%;
-    --card: 240 14% 11%;
-    --card-foreground: 240 20% 96%;
-    --popover: 240 14% 11%;
-    --popover-foreground: 240 20% 96%;
-    --primary: 258 90% 70%;
-    --primary-foreground: 240 16% 8%;
-    --secondary: 240 12% 18%;
-    --secondary-foreground: 240 20% 92%;
-    --muted: 240 12% 16%;
-    --muted-foreground: 240 10% 64%;
-    --accent: 250 30% 22%;
-    --accent-foreground: 250 60% 88%;
-    --destructive: 0 72% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --success: 152 55% 50%;
-    --warning: 38 92% 58%;
-    --info: 217 91% 68%;
-    --border: 240 12% 20%;
-    --input: 240 12% 22%;
-    --ring: 258 90% 70%;
-
-    --brand-from: 258 90% 68%;
-    --brand-via: 280 80% 66%;
-    --brand-to: 215 90% 64%;
+    --background: 165 14% 8%;
+    --foreground: 40 22% 90%;
+    --card: 165 12% 11%;
+    --card-foreground: 40 22% 90%;
+    --popover: 165 12% 11%;
+    --popover-foreground: 40 22% 90%;
+    --primary: 158 36% 54%;
+    --primary-foreground: 165 24% 8%;
+    --secondary: 165 8% 18%;
+    --secondary-foreground: 40 22% 88%;
+    --muted: 165 8% 16%;
+    --muted-foreground: 150 8% 60%;
+    --accent: 165 10% 20%;
+    --accent-foreground: 40 22% 88%;
+    --destructive: 6 58% 56%;
+    --destructive-foreground: 44 44% 97%;
+    --highlight: 24 66% 58%;
+    --highlight-foreground: 165 24% 8%;
+    --success: 152 40% 54%;
+    --warning: 36 66% 58%;
+    --info: 205 48% 62%;
+    --border: 165 8% 20%;
+    --input: 165 8% 22%;
+    --ring: 158 36% 54%;
   }
 }
 
@@ -69,56 +65,81 @@
     @apply border-border;
   }
 
-  html {
-    scroll-behavior: smooth;
-  }
-
   body {
-    @apply bg-background text-foreground antialiased;
-    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    @apply bg-background text-foreground;
+    font-family: 'Hanken Grotesk', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  /* Themed scrollbar */
-  ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
+  h1,
+  h2,
+  h3 {
+    font-family: 'Fraunces', ui-serif, Georgia, serif;
+    text-wrap: balance;
   }
-  ::-webkit-scrollbar-track {
-    background: transparent;
+
+  /* Slim, unobtrusive scrollbar */
+  ::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
   }
   ::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-muted-foreground/25;
-    border: 2px solid transparent;
-    background-clip: padding-box;
+    @apply rounded-full bg-muted-foreground/30;
   }
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-muted-foreground/40;
-    background-clip: padding-box;
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer utilities {
+  /* Tabular figures for ledgers, stats and tables */
+  .nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  /* Faint dotted texture for the auth panel — a deliberate detail, not a blob */
+  .dot-grid {
+    background-image: radial-gradient(currentColor 1px, transparent 1px);
+    background-size: 22px 22px;
   }
 }
 
 @layer components {
-  .gradient-brand {
-    background-image: linear-gradient(
-      135deg,
-      hsl(var(--brand-from)),
-      hsl(var(--brand-via)),
-      hsl(var(--brand-to))
-    );
+  /* Stat card flood-fill on hover (colours supplied per-card via CSS vars) */
+  .stat-card {
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease,
+      border-color 0.3s ease;
   }
-
-  .text-gradient-brand {
-    @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(
-      120deg,
-      hsl(var(--brand-from)),
-      hsl(var(--brand-via)),
-      hsl(var(--brand-to))
-    );
+  .stat-card:hover {
+    background-color: var(--sc-fill);
+    border-color: transparent;
+    color: var(--sc-on);
   }
-
-  /* Subtle frosted card */
-  .glass {
-    @apply bg-card/70 backdrop-blur-xl;
+  .stat-card:hover .sc-dim,
+  .stat-card:hover .sc-icon {
+    color: var(--sc-on);
+  }
+  .stat-card .sc-tile,
+  .stat-card .sc-bar,
+  .stat-card .sc-icon {
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+  .stat-card:hover .sc-tile {
+    background-color: rgb(255 255 255 / 0.22);
+  }
+  .dark .stat-card:hover .sc-tile {
+    background-color: rgb(0 0 0 / 0.12);
+  }
+  .stat-card:hover .sc-bar {
+    background-color: rgb(255 255 255 / 0.4);
+  }
+  .dark .stat-card:hover .sc-bar {
+    background-color: rgb(0 0 0 / 0.25);
   }
 }

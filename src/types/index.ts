@@ -99,26 +99,26 @@ export interface FollowUp {
 export const STATUS_CONFIG: Record<ApplicationStatus, { label: string; className: string }> = {
   APPLIED: {
     label: 'Applied',
-    className: 'bg-blue-100 text-blue-700 ring-1 ring-blue-600/20 dark:bg-blue-500/15 dark:text-blue-300 dark:ring-blue-400/20',
+    className: 'border border-slate-600/20 bg-slate-600/10 text-slate-700 dark:border-slate-400/20 dark:bg-slate-400/10 dark:text-slate-300',
   },
   INTERVIEW_SCHEDULED: {
     label: 'Interview Scheduled',
-    className: 'bg-amber-100 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-500/15 dark:text-amber-300 dark:ring-amber-400/20',
+    className: 'border border-amber-600/20 bg-amber-600/10 text-amber-700 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-300',
   },
   INTERVIEW_DONE: {
     label: 'Interview Done',
-    className: 'bg-violet-100 text-violet-700 ring-1 ring-violet-600/20 dark:bg-violet-500/15 dark:text-violet-300 dark:ring-violet-400/20',
+    className: 'border border-teal-700/20 bg-teal-700/10 text-teal-700 dark:border-teal-400/20 dark:bg-teal-400/10 dark:text-teal-300',
   },
   OFFER_RECEIVED: {
     label: 'Offer Received',
-    className: 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-400/20',
+    className: 'border border-emerald-800/20 bg-emerald-800/10 text-emerald-800 dark:border-emerald-400/20 dark:bg-emerald-400/10 dark:text-emerald-300',
   },
   REJECTED: {
     label: 'Rejected',
-    className: 'bg-rose-100 text-rose-700 ring-1 ring-rose-600/20 dark:bg-rose-500/15 dark:text-rose-300 dark:ring-rose-400/20',
+    className: 'border border-rose-800/20 bg-rose-800/10 text-rose-800 dark:border-rose-400/20 dark:bg-rose-400/10 dark:text-rose-300',
   },
   GHOSTED: {
     label: 'Ghosted',
-    className: 'bg-slate-100 text-slate-600 ring-1 ring-slate-500/20 dark:bg-slate-500/15 dark:text-slate-300 dark:ring-slate-400/20',
+    className: 'border border-stone-500/20 bg-stone-500/10 text-stone-600 dark:border-stone-400/20 dark:bg-stone-400/10 dark:text-stone-300',
   },
 };

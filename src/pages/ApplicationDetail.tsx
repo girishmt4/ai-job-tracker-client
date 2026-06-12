@@ -57,35 +57,32 @@ export function ApplicationDetail() {
         <ArrowLeft className="h-4 w-4" /> Back to applications
       </Link>
 
-      <div className="gradient-brand relative overflow-hidden rounded-2xl p-6 text-white shadow-glow">
-        <div className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
-        <div className="relative flex flex-wrap items-center gap-4">
-          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-bold backdrop-blur">
-            {application.companyName.charAt(0).toUpperCase()}
-          </div>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold leading-tight">{application.companyName}</h1>
-            <p className="text-white/80">{application.jobTitle}</p>
-          </div>
-          <StatusBadge status={application.status as ApplicationStatus} className="bg-white/90 text-foreground ring-0" />
+      <div className="flex flex-wrap items-center gap-4 border-b pb-6">
+        <div className="flex h-14 w-14 items-center justify-center rounded-md bg-secondary font-serif text-2xl font-medium text-secondary-foreground">
+          {application.companyName.charAt(0).toUpperCase()}
         </div>
+        <div className="flex-1">
+          <h1 className="font-serif text-3xl font-medium leading-tight">{application.companyName}</h1>
+          <p className="text-muted-foreground">{application.jobTitle}</p>
+        </div>
+        <StatusBadge status={application.status as ApplicationStatus} />
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid gap-px overflow-hidden rounded-lg border bg-border sm:grid-cols-2">
         {fields.map(({ label, value }) => (
-          <div key={label} className="rounded-xl border bg-card p-4 shadow-soft">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
-            <p className="mt-1 text-sm font-semibold">{value || '—'}</p>
+          <div key={label} className="bg-card p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
+            <p className="mt-1 text-sm font-medium">{value || '—'}</p>
           </div>
         ))}
         {application.jobUrl && (
-          <div className="rounded-xl border bg-card p-4 shadow-soft">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Job URL</p>
+          <div className="bg-card p-4">
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Job URL</p>
             <a
               href={application.jobUrl}
               target="_blank"
               rel="noreferrer"
-              className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+              className="mt-1 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline"
             >
               Open posting <ExternalLink className="h-3 w-3" />
             </a>
@@ -94,8 +91,8 @@ export function ApplicationDetail() {
       </div>
 
       {application.notes && (
-        <div className="rounded-xl border bg-card p-4 shadow-soft">
-          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">Notes</p>
+        <div className="rounded-lg border bg-card p-4">
+          <p className="mb-1 text-xs uppercase tracking-wider text-muted-foreground">Notes</p>
           <p className="whitespace-pre-wrap text-sm leading-relaxed">{application.notes}</p>
         </div>
       )}

@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { Copy, RefreshCw, Mail, Sparkles } from 'lucide-react';
+import { Copy, RefreshCw, Mail } from 'lucide-react';
 import { useStreamingAI } from '@/hooks/useStreamingAI';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -24,8 +24,8 @@ export function CoverLetter() {
     <div className="space-y-6 max-w-3xl">
       <PageHeader
         title="Cover Letter"
-        description="Generate a concise, professional cover note tailored to the role"
-        icon={<Mail className="h-5 w-5" />}
+        description="A concise cover note tailored to the role"
+        icon={<Mail className="h-4 w-4" />}
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -42,9 +42,8 @@ export function CoverLetter() {
           />
         </div>
         <div className="flex gap-2">
-          <Button type="submit" disabled={isStreaming} className="gap-2 shadow-glow">
-            <Sparkles className="h-4 w-4" />
-            {isStreaming ? 'Generating…' : 'Generate Cover Letter'}
+          <Button type="submit" disabled={isStreaming}>
+            {isStreaming ? 'Generating…' : 'Generate cover letter'}
           </Button>
           {output && (
             <Button type="button" variant="outline" onClick={reset}>
@@ -57,11 +56,9 @@ export function CoverLetter() {
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       {(output || isStreaming) && (
-        <div className="animate-fade-in rounded-xl border bg-card p-5 shadow-soft space-y-2">
+        <div className="animate-fade-in space-y-2 rounded-lg border bg-card p-5">
           <div className="flex items-center justify-between">
-            <p className="flex items-center gap-2 text-sm font-semibold">
-              <Sparkles className="h-4 w-4 text-primary" /> Generated Cover Letter
-            </p>
+            <p className="text-xs uppercase tracking-wider text-muted-foreground">Generated cover letter</p>
             {output && (
               <Button variant="ghost" size="sm" onClick={() => navigator.clipboard.writeText(output)}>
                 <Copy className="mr-2 h-4 w-4" /> Copy

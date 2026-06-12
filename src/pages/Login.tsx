@@ -1,15 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Mail, Lock, AlertCircle } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AuthShell } from '@/components/layout/AuthShell';
+import { Wordmark } from '@/components/Wordmark';
 import type { User } from '@/types';
 
 const schema = z.object({
@@ -24,6 +25,10 @@ export function Login() {
   const location = useLocation();
   const from = (location.state as { from?: { pathname: string } })?.from?.pathname || '/';
 
+  // Detected synchronously so we never flash the form during an OAuth callback.
+  const oauthToken = new URLSearchParams(location.search).get('token');
+  const [oauthFailed, setOauthFailed] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -37,15 +42,22 @@ export function Login() {
 
   // Handle Google OAuth callback token
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const token = params.get('token');
-    if (token) {
-      api.get('/auth/me', { headers: { Authorization: `Bearer ${token}` } }).then(({ data }) => {
-        setAuth(data.user as User, token);
+    if (!oauthToken) return;
+    let active = true;
+    api
+      .get('/auth/me', { headers: { Authorization: `Bearer ${oauthToken}` } })
+      .then(({ data }) => {
+        if (!active) return;
+        setAuth(data.user as User, oauthToken);
         navigate('/', { replace: true });
+      })
+      .catch(() => {
+        if (active) setOauthFailed(true);
       });
-    }
-  }, [location.search, setAuth, navigate]);
+    return () => {
+      active = false;
+    };
+  }, [oauthToken, setAuth, navigate]);
 
   async function onSubmit(data: FormData) {
     try {
@@ -58,8 +70,28 @@ export function Login() {
 
   const googleUrl = `${import.meta.env.VITE_API_URL || '/api'}/auth/google`;
 
+  // While exchanging the OAuth token (or already authenticated), show a loader
+  // instead of the login form so it never flashes on the way to the dashboard.
+  if ((oauthToken && !oauthFailed) || isAuthenticated) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-background">
+        <Wordmark />
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          Signing you in…
+        </div>
+      </div>
+    );
+  }
+
   return (
     <AuthShell title="Welcome back" subtitle="Sign in to continue your job search">
+      {oauthFailed && (
+        <div className="mb-4 flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          <AlertCircle className="h-4 w-4 shrink-0" />
+          Google sign-in failed. Please try again.
+        </div>
+      )}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="email">Email</Label>

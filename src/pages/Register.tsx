@@ -30,10 +30,10 @@ function passwordStrength(password: string): { label: string; color: string; wid
   if (/[A-Z]/.test(password)) score++;
   if (/\d/.test(password)) score++;
   if (/[^A-Za-z0-9]/.test(password)) score++;
-  if (score <= 1) return { label: 'Weak', color: 'bg-red-500', width: '25%' };
-  if (score === 2) return { label: 'Fair', color: 'bg-yellow-500', width: '50%' };
-  if (score === 3) return { label: 'Good', color: 'bg-blue-500', width: '75%' };
-  return { label: 'Strong', color: 'bg-green-500', width: '100%' };
+  if (score <= 1) return { label: 'Weak', color: 'bg-destructive', width: '25%' };
+  if (score === 2) return { label: 'Fair', color: 'bg-warning', width: '50%' };
+  if (score === 3) return { label: 'Good', color: 'bg-info', width: '75%' };
+  return { label: 'Strong', color: 'bg-success', width: '100%' };
 }
 
 export function Register() {

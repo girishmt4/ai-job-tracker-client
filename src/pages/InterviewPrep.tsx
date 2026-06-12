@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { MessageSquare, Sparkles } from 'lucide-react';
+import { MessageSquare } from 'lucide-react';
 import api from '@/lib/api';
 import { useStreamingAI } from '@/hooks/useStreamingAI';
 import { Button } from '@/components/ui/button';
@@ -18,10 +18,10 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 const CATEGORY_DOT: Record<string, string> = {
-  javascript: 'bg-amber-500',
-  react: 'bg-cyan-500',
-  systemDesign: 'bg-violet-500',
-  behavioral: 'bg-emerald-500',
+  javascript: 'bg-amber-600',
+  react: 'bg-teal-700',
+  systemDesign: 'bg-slate-600',
+  behavioral: 'bg-emerald-800',
 };
 
 interface FormData {
@@ -97,8 +97,8 @@ export function InterviewPrep() {
     <div className="space-y-6 max-w-3xl">
       <PageHeader
         title="Interview Prep"
-        description="Generate tailored interview questions with model answers"
-        icon={<MessageSquare className="h-5 w-5" />}
+        description="Tailored questions with model answers"
+        icon={<MessageSquare className="h-4 w-4" />}
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -110,9 +110,8 @@ export function InterviewPrep() {
             className="min-h-[200px] resize-none"
           />
         </div>
-        <Button type="submit" disabled={generating} className="gap-2 shadow-glow">
-          <Sparkles className="h-4 w-4" />
-          {generating ? 'Generating questions…' : 'Generate Questions'}
+        <Button type="submit" disabled={generating}>
+          {generating ? 'Generating questions…' : 'Generate questions'}
         </Button>
       </form>
 

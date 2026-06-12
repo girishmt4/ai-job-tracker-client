@@ -1,6 +1,6 @@
 import type { LucideIcon } from 'lucide-react';
-import { Card } from '@/components/ui/card';
 import { ACCENTS, type AccentKey } from '@/lib/accents';
+import { useTheme } from '@/components/theme/ThemeProvider';
 import { cn } from '@/lib/utils';
 
 interface StatCardProps {
@@ -8,41 +8,36 @@ interface StatCardProps {
   value: React.ReactNode;
   icon: LucideIcon;
   accent: AccentKey;
-  hint?: string;
   className?: string;
   style?: React.CSSProperties;
 }
 
-export function StatCard({ label, value, icon: Icon, accent, hint, className, style }: StatCardProps) {
+export function StatCard({ label, value, icon: Icon, accent, className, style }: StatCardProps) {
   const a = ACCENTS[accent];
+  const { resolvedTheme } = useTheme();
+  const dark = resolvedTheme === 'dark';
+
+  const cssVars = {
+    '--sc-fill': dark ? a.fill.dark : a.fill.light,
+    '--sc-on': dark ? a.on.dark : a.on.light,
+  } as React.CSSProperties;
+
   return (
-    <Card
-      interactive
-      style={style}
-      className={cn('group relative overflow-hidden p-5', a.card, a.ring, className)}
+    <div
+      style={{ ...style, ...cssVars }}
+      className={cn(
+        'stat-card group relative cursor-pointer overflow-hidden rounded-lg border bg-card p-4',
+        className
+      )}
     >
-      {/* decorative glow */}
-      <div
-        className={cn(
-          'pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full opacity-20 blur-2xl transition-opacity group-hover:opacity-40',
-          a.iconWrap
-        )}
-      />
-      <div className="relative flex items-start justify-between gap-3">
-        <div className="min-w-0">
-          <p className="text-sm font-medium text-muted-foreground">{label}</p>
-          <p className="mt-1 text-3xl font-bold tracking-tight">{value}</p>
-          {hint && <p className={cn('mt-1 text-xs font-medium', a.text)}>{hint}</p>}
-        </div>
-        <div
-          className={cn(
-            'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-sm transition-transform group-hover:scale-110',
-            a.iconWrap
-          )}
-        >
-          <Icon className="h-5 w-5" />
-        </div>
+      <span className={cn('sc-bar absolute inset-y-0 left-0 w-1', a.bar)} />
+      <div className="flex items-center justify-between pl-1.5">
+        <p className="sc-dim text-xs uppercase tracking-wider text-muted-foreground">{label}</p>
+        <span className={cn('sc-tile flex h-7 w-7 items-center justify-center rounded', a.tile)}>
+          <Icon className={cn('sc-icon h-4 w-4', a.icon)} />
+        </span>
       </div>
-    </Card>
+      <p className="nums mt-3 pl-1.5 font-serif text-4xl font-medium leading-none">{value}</p>
+    </div>
   );
 }

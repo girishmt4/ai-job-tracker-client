@@ -14,9 +14,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 import type { Application, ApplicationStatus } from '@/types';
 
 const WORK_MODEL_STYLES: Record<string, string> = {
-  REMOTE: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300',
-  HYBRID: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',
-  ON_SITE: 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300',
+  REMOTE: 'bg-teal-700/10 text-teal-700 dark:bg-teal-400/10 dark:text-teal-300',
+  HYBRID: 'bg-slate-600/10 text-slate-700 dark:bg-slate-400/10 dark:text-slate-300',
+  ON_SITE: 'bg-amber-600/10 text-amber-700 dark:bg-amber-400/10 dark:text-amber-300',
 };
 
 interface ApplicationsResponse {
@@ -86,25 +86,25 @@ export function Applications() {
         description={`${total} total application${total === 1 ? '' : 's'}`}
         icon={<Briefcase className="h-5 w-5" />}
         actions={
-          <Button onClick={() => setModalOpen(true)} className="gap-2 shadow-glow">
+          <Button onClick={() => setModalOpen(true)} className="gap-2">
             <Plus className="h-4 w-4" /> Add Application
           </Button>
         }
       />
 
       {/* Filters */}
-      <div className="flex gap-3 flex-wrap">
-        <div className="relative">
+      <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="relative w-full sm:w-56">
           <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
-            className="pl-9 w-56"
+            className="w-full pl-9"
             placeholder="Search company or role…"
             value={search}
             onChange={(e) => setParam('search', e.target.value)}
           />
         </div>
         <Select
-          className="w-48"
+          className="w-full sm:w-48"
           value={status}
           onChange={(e) => setParam('status', e.target.value)}
           placeholder="All statuses"
@@ -119,7 +119,7 @@ export function Applications() {
           ]}
         />
         <Select
-          className="w-40"
+          className="w-full sm:w-40"
           value={workModel}
           onChange={(e) => setParam('workModel', e.target.value)}
           placeholder="All models"
@@ -134,7 +134,8 @@ export function Applications() {
 
       {/* Table */}
       <Card className="overflow-hidden p-0">
-        <table className="w-full text-sm">
+        <div className="overflow-x-auto">
+        <table className="w-full min-w-[680px] text-sm">
           <thead>
             <tr className="border-b bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
               <th className="px-4 py-3 text-left font-semibold">Company</th>
@@ -207,6 +208,7 @@ export function Applications() {
             )}
           </tbody>
         </table>
+        </div>
       </Card>
 
       {/* Pagination */}

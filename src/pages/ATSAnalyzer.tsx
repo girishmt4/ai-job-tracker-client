@@ -96,8 +96,8 @@ export function ATSAnalyzer() {
     <div className="space-y-6 max-w-4xl">
       <PageHeader
         title="ATS Analyzer"
-        description="Score your resume against any job description"
-        icon={<BarChart2 className="h-5 w-5" />}
+        description="Score your resume against a job description"
+        icon={<BarChart2 className="h-4 w-4" />}
       />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -134,9 +134,9 @@ export function ATSAnalyzer() {
 
         {error && <p className="text-sm text-destructive">{error}</p>}
 
-        <Button type="submit" disabled={loading} className="gap-2 shadow-glow">
+        <Button type="submit" disabled={loading} className="gap-2">
           <FileCheck2 className="h-4 w-4" />
-          {loading ? 'Analyzing…' : 'Analyze Resume'}
+          {loading ? 'Analyzing…' : 'Analyze resume'}
         </Button>
       </form>
 
@@ -203,7 +203,8 @@ export function ATSAnalyzer() {
 
           {/* Suggestions */}
           <Card className="overflow-hidden p-0">
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto">
+            <table className="w-full min-w-[640px] text-sm">
               <thead>
                 <tr className="border-b bg-muted/50">
                   <th className="px-4 py-2 text-left font-medium">Section</th>
@@ -225,6 +226,7 @@ export function ATSAnalyzer() {
                 ))}
               </tbody>
             </table>
+            </div>
           </Card>
         </div>
       )}

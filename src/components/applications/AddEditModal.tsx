@@ -76,7 +76,7 @@ export function AddEditModal({ open, onOpenChange, application, onSaved }: Props
           <DialogClose onClick={() => onOpenChange(false)} />
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
               <Label>Company *</Label>
               <Input {...register('companyName')} />
@@ -88,7 +88,7 @@ export function AddEditModal({ open, onOpenChange, application, onSaved }: Props
               {errors.jobTitle && <p className="text-xs text-destructive">{errors.jobTitle.message}</p>}
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
               <Label>Location</Label>
               <Input {...register('location')} />
@@ -98,7 +98,7 @@ export function AddEditModal({ open, onOpenChange, application, onSaved }: Props
               <Input type="date" {...register('dateApplied')} />
             </div>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
               <Label>Work Model</Label>
               <Select
@@ -130,7 +130,7 @@ export function AddEditModal({ open, onOpenChange, application, onSaved }: Props
             <Input type="url" {...register('jobUrl')} />
             {errors.jobUrl && <p className="text-xs text-destructive">{errors.jobUrl.message}</p>}
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
               <Label>Expected Salary</Label>
               <Input {...register('salaryExpected')} placeholder="e.g. €70k–80k" />
