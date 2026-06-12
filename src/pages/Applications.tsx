@@ -1,15 +1,23 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { format } from 'date-fns';
-import { Plus, Search, ExternalLink } from 'lucide-react';
+import { Plus, Search, ExternalLink, Briefcase } from 'lucide-react';
 import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select } from '@/components/ui/select';
 import { StatusBadge } from '@/components/StatusBadge';
+import { PageHeader } from '@/components/PageHeader';
+import { Card } from '@/components/ui/card';
 import { AddEditModal } from '@/components/applications/AddEditModal';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Application, ApplicationStatus } from '@/types';
+
+const WORK_MODEL_STYLES: Record<string, string> = {
+  REMOTE: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300',
+  HYBRID: 'bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-300',
+  ON_SITE: 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300',
+};
 
 interface ApplicationsResponse {
   applications: Application[];
@@ -72,16 +80,17 @@ export function Applications() {
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">Applications</h1>
-          <p className="text-muted-foreground">{total} total</p>
-        </div>
-        <Button onClick={() => setModalOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" /> Add Application
-        </Button>
-      </div>
+    <div className="space-y-5">
+      <PageHeader
+        title="Applications"
+        description={`${total} total application${total === 1 ? '' : 's'}`}
+        icon={<Briefcase className="h-5 w-5" />}
+        actions={
+          <Button onClick={() => setModalOpen(true)} className="gap-2 shadow-glow">
+            <Plus className="h-4 w-4" /> Add Application
+          </Button>
+        }
+      />
 
       {/* Filters */}
       <div className="flex gap-3 flex-wrap">
@@ -124,17 +133,17 @@ export function Applications() {
       </div>
 
       {/* Table */}
-      <div className="rounded-md border">
+      <Card className="overflow-hidden p-0">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b bg-muted/50">
-              <th className="px-4 py-3 text-left font-medium">Company</th>
-              <th className="px-4 py-3 text-left font-medium">Role</th>
-              <th className="px-4 py-3 text-left font-medium">Location</th>
-              <th className="px-4 py-3 text-left font-medium">Model</th>
-              <th className="px-4 py-3 text-left font-medium">Status</th>
-              <th className="px-4 py-3 text-left font-medium">Applied</th>
-              <th className="px-4 py-3 text-left font-medium">Link</th>
+            <tr className="border-b bg-muted/60 text-xs uppercase tracking-wide text-muted-foreground">
+              <th className="px-4 py-3 text-left font-semibold">Company</th>
+              <th className="px-4 py-3 text-left font-semibold">Role</th>
+              <th className="px-4 py-3 text-left font-semibold">Location</th>
+              <th className="px-4 py-3 text-left font-semibold">Model</th>
+              <th className="px-4 py-3 text-left font-semibold">Status</th>
+              <th className="px-4 py-3 text-left font-semibold">Applied</th>
+              <th className="px-4 py-3 text-left font-semibold">Link</th>
             </tr>
           </thead>
           <tbody>
@@ -158,14 +167,20 @@ export function Applications() {
               applications.map((app) => (
                 <tr
                   key={app.id}
-                  className="border-b hover:bg-muted/30 cursor-pointer"
+                  className="cursor-pointer border-b border-border/60 transition-colors last:border-0 hover:bg-accent/50"
                   onClick={() => navigate(`/applications/${app.id}`)}
                 >
-                  <td className="px-4 py-3 font-medium">{app.companyName}</td>
+                  <td className="px-4 py-3 font-semibold">{app.companyName}</td>
                   <td className="px-4 py-3 text-muted-foreground">{app.jobTitle}</td>
                   <td className="px-4 py-3 text-muted-foreground">{app.location || '—'}</td>
-                  <td className="px-4 py-3 text-muted-foreground capitalize">
-                    {app.workModel.replace('_', ' ').toLowerCase()}
+                  <td className="px-4 py-3">
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium capitalize ${
+                        WORK_MODEL_STYLES[app.workModel] ?? ''
+                      }`}
+                    >
+                      {app.workModel.replace('_', ' ').toLowerCase()}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
                     <StatusBadge status={app.status as ApplicationStatus} />
@@ -175,7 +190,12 @@ export function Applications() {
                   </td>
                   <td className="px-4 py-3" onClick={(e) => e.stopPropagation()}>
                     {app.jobUrl ? (
-                      <a href={app.jobUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                      <a
+                        href={app.jobUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-lg text-primary transition-colors hover:bg-primary/10"
+                      >
                         <ExternalLink className="h-4 w-4" />
                       </a>
                     ) : (
@@ -187,7 +207,7 @@ export function Applications() {
             )}
           </tbody>
         </table>
-      </div>
+      </Card>
 
       {/* Pagination */}
       {totalPages > 1 && (

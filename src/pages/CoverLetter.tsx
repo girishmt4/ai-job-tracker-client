@@ -1,10 +1,11 @@
 import { useForm } from 'react-hook-form';
-import { Copy, RefreshCw } from 'lucide-react';
+import { Copy, RefreshCw, Mail, Sparkles } from 'lucide-react';
 import { useStreamingAI } from '@/hooks/useStreamingAI';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { PageHeader } from '@/components/PageHeader';
 
 interface FormData {
   jobDescription: string;
@@ -21,10 +22,11 @@ export function CoverLetter() {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <div>
-        <h1 className="text-2xl font-bold">Cover Letter</h1>
-        <p className="text-muted-foreground">Generate a concise, professional cover note tailored to the role</p>
-      </div>
+      <PageHeader
+        title="Cover Letter"
+        description="Generate a concise, professional cover note tailored to the role"
+        icon={<Mail className="h-5 w-5" />}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
@@ -40,7 +42,8 @@ export function CoverLetter() {
           />
         </div>
         <div className="flex gap-2">
-          <Button type="submit" disabled={isStreaming}>
+          <Button type="submit" disabled={isStreaming} className="gap-2 shadow-glow">
+            <Sparkles className="h-4 w-4" />
             {isStreaming ? 'Generating…' : 'Generate Cover Letter'}
           </Button>
           {output && (
@@ -54,9 +57,11 @@ export function CoverLetter() {
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       {(output || isStreaming) && (
-        <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
+        <div className="animate-fade-in rounded-xl border bg-card p-5 shadow-soft space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">Generated Cover Letter</p>
+            <p className="flex items-center gap-2 text-sm font-semibold">
+              <Sparkles className="h-4 w-4 text-primary" /> Generated Cover Letter
+            </p>
             {output && (
               <Button variant="ghost" size="sm" onClick={() => navigator.clipboard.writeText(output)}>
                 <Copy className="mr-2 h-4 w-4" /> Copy

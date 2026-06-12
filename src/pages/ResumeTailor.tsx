@@ -1,9 +1,10 @@
 import { useForm } from 'react-hook-form';
-import { Copy, RefreshCw } from 'lucide-react';
+import { Copy, RefreshCw, FileText, Sparkles } from 'lucide-react';
 import { useStreamingAI } from '@/hooks/useStreamingAI';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { PageHeader } from '@/components/PageHeader';
 
 interface FormData {
   jobDescription: string;
@@ -20,10 +21,11 @@ export function ResumeTailor() {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <div>
-        <h1 className="text-2xl font-bold">Resume Tailor</h1>
-        <p className="text-muted-foreground">Generate a tailored resume summary for any job description</p>
-      </div>
+      <PageHeader
+        title="Resume Tailor"
+        description="Generate a tailored resume summary for any job description"
+        icon={<FileText className="h-5 w-5" />}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-2">
@@ -43,7 +45,8 @@ export function ResumeTailor() {
           />
         </div>
         <div className="lg:col-span-2 flex gap-2">
-          <Button type="submit" disabled={isStreaming}>
+          <Button type="submit" disabled={isStreaming} className="gap-2 shadow-glow">
+            <Sparkles className="h-4 w-4" />
             {isStreaming ? 'Generating…' : 'Generate Tailored Summary'}
           </Button>
           {output && (
@@ -57,9 +60,11 @@ export function ResumeTailor() {
       {error && <p className="text-sm text-destructive">{error}</p>}
 
       {(output || isStreaming) && (
-        <div className="rounded-lg border bg-muted/30 p-4 space-y-2">
+        <div className="animate-fade-in rounded-xl border bg-card p-5 shadow-soft space-y-2">
           <div className="flex items-center justify-between">
-            <p className="text-sm font-medium">Generated Summary</p>
+            <p className="flex items-center gap-2 text-sm font-semibold">
+              <Sparkles className="h-4 w-4 text-primary" /> Generated Summary
+            </p>
             {output && (
               <Button
                 variant="ghost"

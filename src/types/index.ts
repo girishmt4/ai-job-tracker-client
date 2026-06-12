@@ -97,10 +97,28 @@ export interface FollowUp {
 }
 
 export const STATUS_CONFIG: Record<ApplicationStatus, { label: string; className: string }> = {
-  APPLIED: { label: 'Applied', className: 'bg-blue-100 text-blue-800' },
-  INTERVIEW_SCHEDULED: { label: 'Interview Scheduled', className: 'bg-yellow-100 text-yellow-800' },
-  INTERVIEW_DONE: { label: 'Interview Done', className: 'bg-purple-100 text-purple-800' },
-  OFFER_RECEIVED: { label: 'Offer Received', className: 'bg-green-100 text-green-800' },
-  REJECTED: { label: 'Rejected', className: 'bg-red-100 text-red-800' },
-  GHOSTED: { label: 'Ghosted', className: 'bg-gray-100 text-gray-800' },
+  APPLIED: {
+    label: 'Applied',
+    className: 'bg-blue-100 text-blue-700 ring-1 ring-blue-600/20 dark:bg-blue-500/15 dark:text-blue-300 dark:ring-blue-400/20',
+  },
+  INTERVIEW_SCHEDULED: {
+    label: 'Interview Scheduled',
+    className: 'bg-amber-100 text-amber-700 ring-1 ring-amber-600/20 dark:bg-amber-500/15 dark:text-amber-300 dark:ring-amber-400/20',
+  },
+  INTERVIEW_DONE: {
+    label: 'Interview Done',
+    className: 'bg-violet-100 text-violet-700 ring-1 ring-violet-600/20 dark:bg-violet-500/15 dark:text-violet-300 dark:ring-violet-400/20',
+  },
+  OFFER_RECEIVED: {
+    label: 'Offer Received',
+    className: 'bg-emerald-100 text-emerald-700 ring-1 ring-emerald-600/20 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-400/20',
+  },
+  REJECTED: {
+    label: 'Rejected',
+    className: 'bg-rose-100 text-rose-700 ring-1 ring-rose-600/20 dark:bg-rose-500/15 dark:text-rose-300 dark:ring-rose-400/20',
+  },
+  GHOSTED: {
+    label: 'Ghosted',
+    className: 'bg-slate-100 text-slate-600 ring-1 ring-slate-500/20 dark:bg-slate-500/15 dark:text-slate-300 dark:ring-slate-400/20',
+  },
 };

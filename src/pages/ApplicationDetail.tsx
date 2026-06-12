@@ -49,52 +49,68 @@ export function ApplicationDetail() {
   ];
 
   return (
-    <div className="space-y-6 max-w-2xl">
-      <div className="flex items-center gap-3">
-        <Link to="/applications" className="text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-4 w-4" />
-        </Link>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold">{application.companyName}</h1>
-          <p className="text-muted-foreground">{application.jobTitle}</p>
+    <div className="max-w-3xl space-y-6 animate-fade-in">
+      <Link
+        to="/applications"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+      >
+        <ArrowLeft className="h-4 w-4" /> Back to applications
+      </Link>
+
+      <div className="gradient-brand relative overflow-hidden rounded-2xl p-6 text-white shadow-glow">
+        <div className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
+        <div className="relative flex flex-wrap items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-2xl font-bold backdrop-blur">
+            {application.companyName.charAt(0).toUpperCase()}
+          </div>
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold leading-tight">{application.companyName}</h1>
+            <p className="text-white/80">{application.jobTitle}</p>
+          </div>
+          <StatusBadge status={application.status as ApplicationStatus} className="bg-white/90 text-foreground ring-0" />
         </div>
-        <StatusBadge status={application.status as ApplicationStatus} />
       </div>
 
-      <div className="rounded-lg border bg-card divide-y">
+      <div className="grid gap-3 sm:grid-cols-2">
         {fields.map(({ label, value }) => (
-          <div key={label} className="flex items-center justify-between px-4 py-3">
-            <span className="text-sm text-muted-foreground">{label}</span>
-            <span className="text-sm font-medium">{value || '—'}</span>
+          <div key={label} className="rounded-xl border bg-card p-4 shadow-soft">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+            <p className="mt-1 text-sm font-semibold">{value || '—'}</p>
           </div>
         ))}
         {application.jobUrl && (
-          <div className="flex items-center justify-between px-4 py-3">
-            <span className="text-sm text-muted-foreground">Job URL</span>
-            <a href={application.jobUrl} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-sm text-primary hover:underline">
-              Open <ExternalLink className="h-3 w-3" />
+          <div className="rounded-xl border bg-card p-4 shadow-soft">
+            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Job URL</p>
+            <a
+              href={application.jobUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-1 inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+            >
+              Open posting <ExternalLink className="h-3 w-3" />
             </a>
-          </div>
-        )}
-        {application.notes && (
-          <div className="px-4 py-3">
-            <p className="text-sm text-muted-foreground mb-1">Notes</p>
-            <p className="text-sm whitespace-pre-wrap">{application.notes}</p>
           </div>
         )}
       </div>
 
-      <div className="flex gap-2">
-        <Button onClick={() => setEditOpen(true)}>
-          <Edit className="mr-2 h-4 w-4" /> Edit
+      {application.notes && (
+        <div className="rounded-xl border bg-card p-4 shadow-soft">
+          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">Notes</p>
+          <p className="whitespace-pre-wrap text-sm leading-relaxed">{application.notes}</p>
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-2">
+        <Button onClick={() => setEditOpen(true)} className="gap-2">
+          <Edit className="h-4 w-4" /> Edit
         </Button>
         {!application.followUpSent && (
-          <Button variant="outline" onClick={handleFollowUp}>
-            <Bell className="mr-2 h-4 w-4" /> Mark Follow-up Sent
+          <Button variant="outline" onClick={handleFollowUp} className="gap-2">
+            <Bell className="h-4 w-4" /> Mark Follow-up Sent
           </Button>
         )}
-        <Button variant="destructive" onClick={() => setDeleteOpen(true)}>
-          <Trash2 className="mr-2 h-4 w-4" /> Delete
+        <Button variant="destructive" onClick={() => setDeleteOpen(true)} className="gap-2">
+          <Trash2 className="h-4 w-4" /> Delete
         </Button>
       </div>
 

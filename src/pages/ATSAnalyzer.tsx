@@ -1,11 +1,13 @@
 import { useState, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { Upload, CheckCircle2, XCircle } from 'lucide-react';
+import { Upload, CheckCircle2, XCircle, BarChart2, FileCheck2 } from 'lucide-react';
 import api from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { Card } from '@/components/ui/card';
+import { PageHeader } from '@/components/PageHeader';
 import type { ATSResult } from '@/types';
 
 interface FormData {
@@ -19,11 +21,11 @@ const PRIORITY_VARIANT = {
 } as const;
 
 const GRADE_COLOR: Record<string, string> = {
-  A: 'text-green-600',
-  B: 'text-blue-600',
-  C: 'text-yellow-600',
-  D: 'text-orange-600',
-  F: 'text-red-600',
+  A: 'text-emerald-600 dark:text-emerald-400',
+  B: 'text-blue-600 dark:text-blue-400',
+  C: 'text-amber-600 dark:text-amber-400',
+  D: 'text-orange-600 dark:text-orange-400',
+  F: 'text-rose-600 dark:text-rose-400',
 };
 
 function ScoreCircle({ score, grade }: { score: number; grade: string }) {
@@ -92,10 +94,11 @@ export function ATSAnalyzer() {
 
   return (
     <div className="space-y-6 max-w-4xl">
-      <div>
-        <h1 className="text-2xl font-bold">ATS Analyzer</h1>
-        <p className="text-muted-foreground">Score your resume against any job description</p>
-      </div>
+      <PageHeader
+        title="ATS Analyzer"
+        description="Score your resume against any job description"
+        icon={<BarChart2 className="h-5 w-5" />}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
@@ -131,70 +134,75 @@ export function ATSAnalyzer() {
 
         {error && <p className="text-sm text-destructive">{error}</p>}
 
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" disabled={loading} className="gap-2 shadow-glow">
+          <FileCheck2 className="h-4 w-4" />
           {loading ? 'Analyzing…' : 'Analyze Resume'}
         </Button>
       </form>
 
       {result && (
-        <div className="space-y-6">
+        <div className="space-y-6 animate-fade-in">
           {/* Score + summary */}
-          <div className="flex gap-8 items-start rounded-lg border p-6">
+          <Card className="flex flex-wrap items-center gap-8 p-6">
             <ScoreCircle score={result.score} grade={result.grade} />
-            <div className="flex-1">
-              <p className="text-sm font-medium mb-1">Summary</p>
+            <div className="min-w-[200px] flex-1">
+              <p className="mb-1 text-sm font-semibold">Summary</p>
               <p className="text-sm text-muted-foreground">{result.summary}</p>
             </div>
-          </div>
+          </Card>
 
           <div className="grid gap-6 lg:grid-cols-2">
             {/* Strengths */}
-            <div className="rounded-lg border p-4 space-y-2">
-              <p className="font-medium text-sm">Strengths</p>
+            <Card className="space-y-2 border-emerald-300/50 bg-emerald-50/50 p-4 dark:border-emerald-500/20 dark:bg-emerald-500/5">
+              <p className="flex items-center gap-2 text-sm font-semibold text-emerald-700 dark:text-emerald-300">
+                <CheckCircle2 className="h-4 w-4" /> Strengths
+              </p>
               {result.strengths.map((s, i) => (
                 <div key={i} className="flex items-start gap-2 text-sm">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-green-600" />
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600 dark:text-emerald-400" />
                   {s}
                 </div>
               ))}
-            </div>
+            </Card>
             {/* Gaps */}
-            <div className="rounded-lg border p-4 space-y-2">
-              <p className="font-medium text-sm">Gaps</p>
+            <Card className="space-y-2 border-rose-300/50 bg-rose-50/50 p-4 dark:border-rose-500/20 dark:bg-rose-500/5">
+              <p className="flex items-center gap-2 text-sm font-semibold text-rose-700 dark:text-rose-300">
+                <XCircle className="h-4 w-4" /> Gaps
+              </p>
               {result.gaps.map((g, i) => (
                 <div key={i} className="flex items-start gap-2 text-sm">
-                  <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-500" />
+                  <XCircle className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
                   {g}
                 </div>
               ))}
-            </div>
+            </Card>
           </div>
 
           {/* Keywords */}
-          <div className="rounded-lg border p-4 space-y-3">
-            <p className="font-medium text-sm">Keywords</p>
+          <Card className="space-y-3 p-4">
+            <p className="text-sm font-semibold">Keywords</p>
             <div className="grid gap-3 lg:grid-cols-2">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Found ({result.keywords.found.length})</p>
-                <div className="flex flex-wrap gap-1">
+                <p className="mb-1.5 text-xs text-muted-foreground">Found ({result.keywords.found.length})</p>
+                <div className="flex flex-wrap gap-1.5">
                   {result.keywords.found.map((k) => (
-                    <span key={k} className="rounded-full bg-green-100 px-2 py-0.5 text-xs text-green-800">{k}</span>
+                    <span key={k} className="rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300">{k}</span>
                   ))}
                 </div>
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Missing ({result.keywords.missing.length})</p>
-                <div className="flex flex-wrap gap-1">
+                <p className="mb-1.5 text-xs text-muted-foreground">Missing ({result.keywords.missing.length})</p>
+                <div className="flex flex-wrap gap-1.5">
                   {result.keywords.missing.map((k) => (
-                    <span key={k} className="rounded-full bg-red-100 px-2 py-0.5 text-xs text-red-800">{k}</span>
+                    <span key={k} className="rounded-full bg-rose-100 px-2.5 py-0.5 text-xs font-medium text-rose-700 dark:bg-rose-500/15 dark:text-rose-300">{k}</span>
                   ))}
                 </div>
               </div>
             </div>
-          </div>
+          </Card>
 
           {/* Suggestions */}
-          <div className="rounded-lg border overflow-hidden">
+          <Card className="overflow-hidden p-0">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b bg-muted/50">
@@ -217,7 +225,7 @@ export function ATSAnalyzer() {
                 ))}
               </tbody>
             </table>
-          </div>
+          </Card>
         </div>
       )}
     </div>

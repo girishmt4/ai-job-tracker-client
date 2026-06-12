@@ -14,12 +14,15 @@ import {
   Legend,
 } from 'recharts';
 import { format } from 'date-fns';
-import { Briefcase, Calendar, TrendingUp, Star, AlertCircle } from 'lucide-react';
+import { Briefcase, CalendarDays, TrendingUp, MessagesSquare, Award, AlertCircle, ChevronRight } from 'lucide-react';
 import api from '@/lib/api';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { StatCard } from '@/components/StatCard';
+import { PageHeader } from '@/components/PageHeader';
 import type { StatsOverview, TimelineEntry, StatusCount, FollowUp, ApplicationStatus } from '@/types';
 import { STATUS_CONFIG } from '@/types';
+import type { AccentKey } from '@/lib/accents';
 
 const STATUS_COLORS: Record<ApplicationStatus, string> = {
   APPLIED: '#3b82f6',
@@ -56,54 +59,59 @@ export function Dashboard() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+        <Skeleton className="h-12 w-64 rounded-lg" />
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 rounded-lg" />
+            <Skeleton key={i} className="h-28 rounded-xl" />
           ))}
         </div>
-        <Skeleton className="h-64 rounded-lg" />
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Skeleton className="h-72 rounded-xl" />
+          <Skeleton className="h-72 rounded-xl" />
+        </div>
       </div>
     );
   }
 
-  const statCards = [
-    { label: 'Total Applications', value: overview?.totalApplications ?? 0, icon: Briefcase },
-    { label: 'This Week', value: overview?.thisWeek ?? 0, icon: Calendar },
-    { label: 'This Month', value: overview?.thisMonth ?? 0, icon: TrendingUp },
-    { label: 'Interviews', value: overview?.interviews ?? 0, icon: Star },
-    { label: 'Offers', value: overview?.offers ?? 0, icon: Star },
+  const statCards: { label: string; value: number; icon: typeof Briefcase; accent: AccentKey }[] = [
+    { label: 'Total Applications', value: overview?.totalApplications ?? 0, icon: Briefcase, accent: 'violet' },
+    { label: 'This Week', value: overview?.thisWeek ?? 0, icon: CalendarDays, accent: 'blue' },
+    { label: 'This Month', value: overview?.thisMonth ?? 0, icon: TrendingUp, accent: 'cyan' },
+    { label: 'Interviews', value: overview?.interviews ?? 0, icon: MessagesSquare, accent: 'amber' },
+    { label: 'Offers', value: overview?.offers ?? 0, icon: Award, accent: 'emerald' },
   ];
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-muted-foreground">Your job search at a glance</p>
-      </div>
+      <PageHeader
+        title="Dashboard"
+        description="Your job search at a glance"
+        icon={<TrendingUp className="h-5 w-5" />}
+      />
 
       {/* Stats cards */}
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
-        {statCards.map(({ label, value, icon: Icon }) => (
-          <Card key={label}>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground">{label}</p>
-                  <p className="text-3xl font-bold">{value}</p>
-                </div>
-                <Icon className="h-8 w-8 text-muted-foreground/40" />
-              </div>
-            </CardContent>
-          </Card>
+        {statCards.map((stat, i) => (
+          <StatCard
+            key={stat.label}
+            label={stat.label}
+            value={stat.value}
+            icon={stat.icon}
+            accent={stat.accent}
+            className="animate-fade-in-up"
+            style={{ animationDelay: `${i * 60}ms` }}
+          />
         ))}
       </div>
 
       {/* Follow-up reminders */}
       {followUps.length > 0 && (
-        <Card className="border-yellow-200 bg-yellow-50">
+        <Card className="overflow-hidden border-amber-300/60 bg-amber-50/70 dark:border-amber-500/30 dark:bg-amber-500/10">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-yellow-800">
-              <AlertCircle className="h-5 w-5" />
+            <CardTitle className="flex items-center gap-2 text-base text-amber-700 dark:text-amber-300">
+              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-400/20">
+                <AlertCircle className="h-5 w-5" />
+              </span>
               {followUps.length} application{followUps.length > 1 ? 's' : ''} need follow-up
             </CardTitle>
           </CardHeader>
@@ -113,13 +121,16 @@ export function Dashboard() {
                 <Link
                   key={f.id}
                   to={`/applications/${f.id}`}
-                  className="flex items-center justify-between rounded-md bg-white px-3 py-2 hover:bg-yellow-100 transition-colors"
+                  className="group flex items-center justify-between rounded-lg bg-card/80 px-3 py-2.5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-soft"
                 >
                   <div>
-                    <p className="font-medium text-sm">{f.companyName}</p>
+                    <p className="text-sm font-semibold">{f.companyName}</p>
                     <p className="text-xs text-muted-foreground">{f.jobTitle}</p>
                   </div>
-                  <span className="text-xs text-yellow-700">{f.daysSinceApplied} days ago</span>
+                  <span className="flex items-center gap-1 text-xs font-medium text-amber-600 dark:text-amber-400">
+                    {f.daysSinceApplied} days ago
+                    <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </span>
                 </Link>
               ))}
             </div>
@@ -131,7 +142,7 @@ export function Dashboard() {
         {/* Timeline chart */}
         <Card>
           <CardHeader>
-            <CardTitle>Applications (last 30 days)</CardTitle>
+            <CardTitle className="text-base font-semibold">Applications (last 30 days)</CardTitle>
           </CardHeader>
           <CardContent>
             {timeline.length === 0 ? (
@@ -139,15 +150,42 @@ export function Dashboard() {
             ) : (
               <ResponsiveContainer width="100%" height={220}>
                 <LineChart data={timeline}>
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <defs>
+                    <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+                      <stop offset="0%" stopColor="hsl(var(--brand-from))" />
+                      <stop offset="100%" stopColor="hsl(var(--brand-to))" />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
                   <XAxis
                     dataKey="date"
                     tickFormatter={(d: string) => format(new Date(d), 'MMM d')}
-                    tick={{ fontSize: 12 }}
+                    tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                    stroke="hsl(var(--border))"
                   />
-                  <YAxis allowDecimals={false} tick={{ fontSize: 12 }} />
-                  <Tooltip labelFormatter={(d: string) => format(new Date(d), 'MMM d, yyyy')} />
-                  <Line type="monotone" dataKey="count" stroke="#3b82f6" strokeWidth={2} dot={false} />
+                  <YAxis
+                    allowDecimals={false}
+                    tick={{ fontSize: 12, fill: 'hsl(var(--muted-foreground))' }}
+                    stroke="hsl(var(--border))"
+                  />
+                  <Tooltip
+                    labelFormatter={(d: string) => format(new Date(d), 'MMM d, yyyy')}
+                    contentStyle={{
+                      background: 'hsl(var(--popover))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '0.5rem',
+                      color: 'hsl(var(--popover-foreground))',
+                      fontSize: 12,
+                    }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="count"
+                    stroke="url(#lineGradient)"
+                    strokeWidth={3}
+                    dot={false}
+                    activeDot={{ r: 5, fill: 'hsl(var(--primary))' }}
+                  />
                 </LineChart>
               </ResponsiveContainer>
             )}
@@ -157,7 +195,7 @@ export function Dashboard() {
         {/* Status breakdown */}
         <Card>
           <CardHeader>
-            <CardTitle>By Status</CardTitle>
+            <CardTitle className="text-base font-semibold">By Status</CardTitle>
           </CardHeader>
           <CardContent>
             {byStatus.length === 0 ? (
@@ -171,16 +209,31 @@ export function Dashboard() {
                     nameKey="status"
                     cx="50%"
                     cy="50%"
+                    innerRadius={50}
                     outerRadius={80}
+                    paddingAngle={3}
+                    stroke="hsl(var(--card))"
+                    strokeWidth={2}
                   >
                     {byStatus.map((entry) => (
                       <Cell key={entry.status} fill={STATUS_COLORS[entry.status]} />
                     ))}
                   </Pie>
                   <Legend
-                    formatter={(value: string) => STATUS_CONFIG[value as ApplicationStatus]?.label ?? value}
+                    formatter={(value: string) => (
+                      <span style={{ color: 'hsl(var(--muted-foreground))', fontSize: 12 }}>
+                        {STATUS_CONFIG[value as ApplicationStatus]?.label ?? value}
+                      </span>
+                    )}
                   />
                   <Tooltip
+                    contentStyle={{
+                      background: 'hsl(var(--popover))',
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '0.5rem',
+                      color: 'hsl(var(--popover-foreground))',
+                      fontSize: 12,
+                    }}
                     formatter={(value: number, name: string) => [
                       value,
                       STATUS_CONFIG[name as ApplicationStatus]?.label ?? name,

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { MessageSquare, Sparkles } from 'lucide-react';
 import api from '@/lib/api';
 import { useStreamingAI } from '@/hooks/useStreamingAI';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import { PageHeader } from '@/components/PageHeader';
 import type { InterviewQuestions, InterviewQuestion } from '@/types';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -13,6 +15,13 @@ const CATEGORY_LABELS: Record<string, string> = {
   react: 'React',
   systemDesign: 'System Design',
   behavioral: 'Behavioral',
+};
+
+const CATEGORY_DOT: Record<string, string> = {
+  javascript: 'bg-amber-500',
+  react: 'bg-cyan-500',
+  systemDesign: 'bg-violet-500',
+  behavioral: 'bg-emerald-500',
 };
 
 interface FormData {
@@ -86,10 +95,11 @@ export function InterviewPrep() {
 
   return (
     <div className="space-y-6 max-w-3xl">
-      <div>
-        <h1 className="text-2xl font-bold">Interview Prep</h1>
-        <p className="text-muted-foreground">Generate tailored interview questions with model answers</p>
-      </div>
+      <PageHeader
+        title="Interview Prep"
+        description="Generate tailored interview questions with model answers"
+        icon={<MessageSquare className="h-5 w-5" />}
+      />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-2">
@@ -100,7 +110,8 @@ export function InterviewPrep() {
             className="min-h-[200px] resize-none"
           />
         </div>
-        <Button type="submit" disabled={generating}>
+        <Button type="submit" disabled={generating} className="gap-2 shadow-glow">
+          <Sparkles className="h-4 w-4" />
           {generating ? 'Generating questions…' : 'Generate Questions'}
         </Button>
       </form>
@@ -111,8 +122,12 @@ export function InterviewPrep() {
         <div className="space-y-6">
           {Object.entries(questions.questions).map(([category, qs]) =>
             qs.length > 0 ? (
-              <div key={category}>
-                <h2 className="font-semibold mb-2">{CATEGORY_LABELS[category] ?? category}</h2>
+              <div key={category} className="animate-fade-in">
+                <h2 className="mb-2 flex items-center gap-2 font-semibold">
+                  <span className={`h-2.5 w-2.5 rounded-full ${CATEGORY_DOT[category] ?? 'bg-primary'}`} />
+                  {CATEGORY_LABELS[category] ?? category}
+                  <span className="text-xs font-normal text-muted-foreground">({qs.length})</span>
+                </h2>
                 <Accordion type="single">
                   {qs.map((q: InterviewQuestion) => (
                     <QuestionCard
