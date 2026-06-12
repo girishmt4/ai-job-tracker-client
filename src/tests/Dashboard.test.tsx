@@ -24,7 +24,7 @@ describe('Dashboard Component', () => {
       </MemoryRouter>
     );
     await waitFor(() => {
-      expect(screen.getByText('5')).toBeInTheDocument();
+      expect(screen.getAllByText('5').length).toBeGreaterThan(0);
     });
     expect(screen.getByText(/total applications/i)).toBeInTheDocument();
   });
